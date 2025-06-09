@@ -9,7 +9,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-app.use(express.json());
 
 // Estados del bot
 const STATE = {
@@ -94,7 +93,7 @@ async function sendTextMessage(to, text) {
   }
 }
 
-// Webhook de verificación
+// Webhook de verificación (GET)
 app.get('/webhook', (req, res) => {
   const mode = req.query['hub.mode'];
   const token = req.query['hub.verify_token'];
@@ -109,7 +108,7 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-// Webhook para recibir mensajes
+// Webhook POST - Recepción de mensajes de WhatsApp
 app.post('/webhook', async (req, res) => {
   const body = req.body;
 
@@ -282,7 +281,7 @@ app.post('/webhook', async (req, res) => {
             "✅ ¡Gracias por su solicitud!\n\nNos pondremos en contacto en el menor tiempo posible."
           );
 
-          delete userData[from]; // Limpiar datos
+          delete userData[from]; // Limpiar datos del cliente
 
         } catch (err) {
           console.error("🚨 Error al guardar en Sheets:", err.message);
