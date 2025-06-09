@@ -1,0 +1,4 @@
+# Archivos sensibles y carpetas que no subimos a GitHub
+.env
+node_modules/
+package-lock.json
