@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const app = express();
+
+// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -99,8 +101,10 @@ app.get('/webhook', (req, res) => {
   const challenge = req.query['hub.challenge'];
 
   if (mode && token && mode === 'subscribe' && token === process.env.VERIFY_TOKEN) {
+    console.log("✅ Webhook verificado");
     res.status(200).send(challenge);
   } else {
+    console.log("❌ Token inválido");
     res.sendStatus(403);
   }
 });
@@ -189,7 +193,6 @@ app.post('/webhook', async (req, res) => {
           from,
           "📐 ¿Cuántos metros cuadrados tiene su inmueble?\n\n1. 0-50 m²\n2. 51-100 m²\n3. 101-200 m²\n4. Más de 200 m²"
         );
-
         user.state = STATE.AREA;
         break;
 
@@ -208,7 +211,6 @@ app.post('/webhook', async (req, res) => {
           from,
           "⚙️ ¿Qué servicio necesita?\n\n1. Desinsectación Integral\n2. Fumigación de mercaderías\n3. Control y Monitoreo de Roedores\n4. Desinfección de ambientes\n5. Limpieza de Cisterna/Reservorios\n6. Limpieza de Pozos Sépticos\n7. Mantenimiento de Trampas de Grasa\n8. Otro servicio"
         );
-
         user.state = STATE.SERVICE;
         break;
 
@@ -227,7 +229,6 @@ app.post('/webhook', async (req, res) => {
           from,
           "⚠️ ¿El servicio es Preventivo o Correctivo?\n\n1. Preventivo (mantenimiento regular)\n2. Correctivo (solución a problema existente)"
         );
-
         user.state = STATE.SERVICE_TYPE;
         break;
 
@@ -246,7 +247,6 @@ app.post('/webhook', async (req, res) => {
           from,
           "📞 ¿Desea que un asesor le contacte?\n\n1. Sí, por favor\n2. No, gracias"
         );
-
         user.state = STATE.CONTACT;
         break;
 
